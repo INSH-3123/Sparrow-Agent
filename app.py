@@ -1,4 +1,29 @@
 import streamlit as st
+st.set_page_config(
+    page_title="Sparrow Agent",
+    page_icon="🪶",
+    layout="wide"
+)
+with st.sidebar:
+
+    st.title("🪶 Sparrow Agent")
+
+    st.divider()
+
+    st.header("Navigation")
+
+    st.write("🏠 **Dashboard**")
+    st.write("📄 **Resume Analysis**")
+    st.write("📊 **Resume Score**")
+    st.write("🎯 **ATS Score**")
+    st.write("🧠 **Skill Gap**")
+    st.write("💼 **Job Recommendations**")
+    st.write("📥 **Download Report**")
+
+    st.divider()
+
+    st.caption("Version 0.2")
+
 from pypdf import PdfReader
 
 st.title("🪶 Sparrow Agent")
@@ -112,12 +137,18 @@ if st.session_state.analyzed:
     if "EXPERIENCE" in text.upper():
         score += 25 
 
-    st.subheader("📊 Resume Score")
+    
+    st.subheader("📊 Dashboard Overview")
+    
+    col1, col2, col3 = st.columns(3)
 
-    st.metric(
-        label="Overall Score",
-        value=f"{score}/100"
-    )
+    with col1:
+            with st.container(border=True):
+                st.metric(
+                    "📄 Resume Score",
+                    f"{score}/100"
+                )
+                st.progress(score / 100)
 
     ats_score = 0
 
@@ -136,12 +167,13 @@ if st.session_state.analyzed:
     if "CERTIFICATION" in text.upper():
         ats_score += 20
 
-    st.subheader("🤖 ATS Compatibility Score")
-
-    st.metric(
-        label="ATS Score",
-        value=f"{ats_score}/100"
-    )
+    with col2:
+        with st.container(border=True):
+            st.metric(
+                "ATS Score",
+                f"{ats_score}/100"
+            )
+            st.progress(ats_score / 100)
 
     if ats_score >= 80:
         st.success("✅ ATS Friendly Resume")
@@ -151,6 +183,18 @@ if st.session_state.analyzed:
 
     else:
         st.error("❌ ATS Optimization Needed")
+
+    career_score = int((score + ats_score) / 2)
+
+    with col3:
+        with st.container(border=True):
+            st.metric(
+                "Career Readiness",
+                f"{career_score}%"
+            )
+            st.progress(career_score / 100)
+    st.divider()
+
 
     st.subheader("🎯 Skill Gap Analysis")
     required_skills = [
@@ -180,8 +224,19 @@ if st.session_state.analyzed:
 
         st.warning("Missing Skills Detected")
 
+        skill_info = {
+            "PANDAS": "Essential for cleaning and analyzing datasets used in AI projects.",
+            "NUMPY": "Required for numerical operations in Machine Learning.",
+            "MACHINE LEARNING": "Build predictive models and intelligent applications.",
+            "DEEP LEARNING": "Develop neural networks for computer vision and NLP.",
+            "SQL": "Manage and retrieve data from databases efficiently.",
+            "PYTHON": "The primary programming language used in AI development."
+        }
+
         for skill in missing_skills:
-            st.write(f"❌ {skill}")
+            with st.container(border=True):
+                st.markdown(f"### ❌ {skill}")
+                st.caption(skill_info.get(skill, "Recommended skill for AI roles."))
 
     st.subheader("💡 Recommendations")
     col1, col2 = st.columns(2)
@@ -244,22 +299,51 @@ if st.session_state.analyzed:
     st.subheader("📝 Resume Improvement Suggestions")
 
     if "EXPERIENCE" not in text.upper():
-        st.warning("⚠ Add internship, freelance, or project experience.")
+       with st.container(border=True):
+            st.markdown("### 💼 Add Experience")
+            st.caption(
+                "Internships, freelance work, or real-world projects greatly improve recruiter confidence."
+            )
 
     if "CERTIFICATION" not in text.upper():
-        st.warning("⚠ Add industry-relevant certifications.")
+        with st.container(border=True):
+             st.markdown("### 📜 Add Certifications")
+             st.caption(
+                 "Industry-relevant certifications enhance your qualifications and demonstrate commitment to learning."
+             )
 
     if "LINKEDIN" not in text.upper():
-        st.warning("⚠ Add your LinkedIn profile link.")
+        with st.container(border=True):
+             st.markdown("### 🔗 Add LinkedIn Profile")
+             st.caption(
+                 "A professional LinkedIn profile increases credibility and recruiter visibility."
+             )
 
     if len(missing_skills) > 0:
-        st.warning(
-            f"⚠ Consider learning: {', '.join(missing_skills)}"
-        )
-    if score >= 75:
-        st.success(
-            "✅ Strong technical foundation detected. Focus on experience and skill expansion."
-        )
+        with st.container(border=True):
+            st.markdown("### 📚 Learning Roadmap")
+            st.caption(
+                f"Recommended next technologies: {', '.join(missing_skills)}"
+            )
+        st.divider()
+
+        st.info(
+            """
+        ### 🪶 Sparrow's Overall Assessment
+
+        Your resume demonstrates a solid academic foundation with relevant technical skills.
+
+        **Strengths**
+        - Good programming foundation
+        - ATS-friendly structure
+        - Strong AI/Data Science coursework
+
+        **Next Priority**
+        Gain practical experience through projects or internships and continue expanding your ML toolkit.
+        """
+        ) 
+
+
     report = f"""
     SPARROW AGENT REPORT
 
