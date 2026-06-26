@@ -23,9 +23,13 @@ with st.sidebar:
 
     st.divider()
 
-    st.caption("Version 0.2")
+    st.caption("Version 0.3 - AI Resume Analysis Assistant")
 
 from pypdf import PdfReader
+
+from career_analyzer import analyze_career
+
+from resume_analyzer import analyze_resume
 
 st.title("🪶 Sparrow Agent")
 
@@ -90,11 +94,11 @@ if st.session_state.analyzed:
         st.error("❌ Experience section Missing.") 
 
 
-        degree = ""
+    degree = ""
     if "ARTIFICIAL INTELLIGENCE" in text.upper():
         degree = "AI & Data Science Graduate"
            
-        skills_found = []
+    skills_found = []
 
     if "PYTHON" in text.upper():
         skills_found.append("Python")
@@ -351,47 +355,12 @@ if st.session_state.analyzed:
         st.divider()
 
         st.subheader("🎯 Career Match Dashboard")
-        ai_engineer = 35
-        ml_engineer = 25
-        data_analyst = 30
-        python_dev = 30
+        career_scores, best_role = analyze_career(text)
 
-
-        if "PYTHON" in text.upper():
-            ai_engineer += 10
-            ml_engineer += 15
-            python_dev += 25
-
-        if "SQL" in text.upper():
-            ai_engineer += 5
-            data_analyst += 20    
-
-        if "MACHINE LEARNING" in text.upper():
-            ai_engineer += 15
-            ml_engineer += 25    
-
-        if "DEEP LEARNING" in text.upper():
-            ai_engineer += 15
-            ml_engineer += 20
-
-        if "PANDAS" in text.upper():
-            data_analyst += 15  
-
-        if "NUMPY" in text.upper():
-            ml_engineer += 10      
-
-        if "REACT" in text.upper():
-            python_dev += 10
-
-        if "PROJECT" in text.upper():
-            ai_engineer += 10
-            ml_engineer += 5
-            python_dev += 10
-
-        if "EXPERIENCE" in text.upper():
-            ai_engineer += 10
-            ml_engineer += 10
-            python_dev += 5
+        ai_engineer = career_scores["AI Engineer"]
+        ml_engineer = career_scores["ML Engineer"]
+        data_analyst = career_scores["Data Analyst"]
+        python_dev = career_scores["Python Developer"]
 
         career_scores = {
             "AI Engineer": ai_engineer,
@@ -501,20 +470,6 @@ if st.session_state.analyzed:
         rating = "Average"
     else:
         rating = "Needs Improvement"
-
-    today = datetime.now().strftime("%d-%m-%Y")
-
-    candidate = text.strip().split("\n")[0]
-
-    if career_score >= 85:
-        rating = "Excellent"
-    elif career_score >= 70:
-        rating = "Good"
-    elif career_score >= 50:
-        rating = "Average"
-    else:
-        rating = "Needs Improvement"
-
     
 
     report = f"""
