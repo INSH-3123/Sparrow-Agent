@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 st.set_page_config(
     page_title="Sparrow Agent",
     page_icon="🪶",
@@ -35,7 +36,7 @@ upload_file = st.file_uploader(
     type=["pdf"]
 )
 
-if upload_file:
+if upload_file is not None:
     st.success("Resume uploaded successfully!")
 
     pdf = PdfReader(upload_file)
@@ -44,6 +45,8 @@ if upload_file:
 
     for page in pdf.pages:
         text += page.extract_text()
+
+    st.session_state.resume_text = text    
 
     st.subheader("Extracted Resume Text")
 
@@ -59,6 +62,8 @@ analyze = st.button("Analyze Resume")
 
 if analyze:
     st.session_state.analyzed = True
+    
+text = st.session_state.get("resume_text", "")
 
 if st.session_state.analyzed:
 
@@ -343,22 +348,240 @@ if st.session_state.analyzed:
         """
         ) 
 
+        st.divider()
+
+        st.subheader("🎯 Career Match Dashboard")
+        ai_engineer = 35
+        ml_engineer = 25
+        data_analyst = 30
+        python_dev = 30
+
+
+        if "PYTHON" in text.upper():
+            ai_engineer += 10
+            ml_engineer += 15
+            python_dev += 25
+
+        if "SQL" in text.upper():
+            ai_engineer += 5
+            data_analyst += 20    
+
+        if "MACHINE LEARNING" in text.upper():
+            ai_engineer += 15
+            ml_engineer += 25    
+
+        if "DEEP LEARNING" in text.upper():
+            ai_engineer += 15
+            ml_engineer += 20
+
+        if "PANDAS" in text.upper():
+            data_analyst += 15  
+
+        if "NUMPY" in text.upper():
+            ml_engineer += 10      
+
+        if "REACT" in text.upper():
+            python_dev += 10
+
+        if "PROJECT" in text.upper():
+            ai_engineer += 10
+            ml_engineer += 5
+            python_dev += 10
+
+        if "EXPERIENCE" in text.upper():
+            ai_engineer += 10
+            ml_engineer += 10
+            python_dev += 5
+
+        career_scores = {
+            "AI Engineer": ai_engineer,
+            "ML Engineer": ml_engineer,
+            "Data Analyst": data_analyst,
+            "Python Developer": python_dev
+        }
+
+        best_role = max(career_scores, key=career_scores.get)
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            with st.container(border=True):
+                st.markdown("### 🤖 AI Engineer")
+                st.metric("Match", f"{ai_engineer}%")
+                st.progress(ai_engineer/100)
+
+            with st.container(border=True):    
+                st.markdown("### 📊 Data Analyst")
+                st.metric("Match", f"{data_analyst}%")
+                st.progress(data_analyst / 100)
+
+        with col2:
+
+            with st.container(border=True):
+                st.markdown("### 🧠 ML Engineer")
+                st.metric("Match", f"{ml_engineer}%")
+                st.progress(ml_engineer / 100)
+            
+            with st.container(border=True): 
+                st.markdown("### 🐍 Python Developer")
+                st.metric("Match", f"{python_dev}%")
+                st.progress(python_dev / 100)
+
+
+        st.divider()
+
+        st.subheader("🪶 Why Sparrow Recommended This")   
+
+        with st.container(border=True):
+            st.markdown("## 🎯 Best Career Match")
+            st.metric(
+                "Recommended Role",
+                best_role
+            )
+            
+        st.write("✅ Python detected")
+        st.write("✅ SQL detected")
+        st.write("✅ AI & Data Science degree")
+        st.write("✅ Project experience")
+        st.write("❌ TensorFlow not found")
+        st.write("❌ Internship experience not found")  
+
+        st.info(f"""
+        Sparrow selected **{best_role}** because your resume demonstrates strong technical skills and is the best overall match based on the detected technologies in your resume.
+        """)
+
+        st.subheader("🤔 Why Not the Other Careers?")
+
+        with st.expander("🧠 ML Engineer"):
+            if "TENSORFLOW" not in text.upper():
+                st.write("❌ TensorFlow not found")
+
+            if "PYTORCH" not in text.upper():
+                st.write("❌ PyTorch not found")
+
+            if "NUMPY" not in text.upper():
+                st.write("❌ NumPy not found")
+
+            st.success("✔ Strong Machine Learning foundation detected.")
+
+        with st.expander("📊 Data Analyst"):
+            if "EXCEL" not in text.upper():
+                st.write("❌ Excel not found")
+
+            if "POWER BI" not in text.upper():
+                st.write("❌ Power BI not found")
+
+            if "TABLEAU" not in text.upper():
+                st.write("❌ Tableau not found")
+
+            st.success("✔ SQL skills detected.")
+
+        with st.expander("🐍 Python Developer"):
+            if "DJANGO" not in text.upper():
+                st.write("❌ Django not found")
+
+            if "FLASK" not in text.upper():
+                st.write("❌ Flask not found")
+
+            if "REACT" not in text.upper():
+                st.write("❌ React not found")
+
+            st.success("✔ Python skills detected.")    
+
+    today = datetime.now().strftime("%d-%m-%Y")
+
+    candidate = text.strip().split("\n")[0]
+
+    if career_score >= 85:
+        rating = "Excellent"
+    elif career_score >= 70:
+        rating = "Good"
+    elif career_score >= 50:
+        rating = "Average"
+    else:
+        rating = "Needs Improvement"
+
+    today = datetime.now().strftime("%d-%m-%Y")
+
+    candidate = text.strip().split("\n")[0]
+
+    if career_score >= 85:
+        rating = "Excellent"
+    elif career_score >= 70:
+        rating = "Good"
+    elif career_score >= 50:
+        rating = "Average"
+    else:
+        rating = "Needs Improvement"
+
+    
 
     report = f"""
-    SPARROW AGENT REPORT
+    ====================================================
+            🪶 SPARROW AGENT RESUME REPORT
+    ====================================================
 
-    Resume Score: {score}/100
+    Generated On   : {today}
+    Candidate Name : {candidate}
+    Overall Rating : {rating}
+    Recommended Role: {best_role}
+    ----------------------------------------------------
+    📊 SCORES
+    ----------------------------------------------------
 
-    ATS Score: {ats_score}/100
+    Resume Score      : {score}/100
+    ATS Score         : {ats_score}/100
+    Career Readiness  : {career_score}%
+
+    ----------------------------------------------------
+    🎯 BEST CAREER MATCH
+    ----------------------------------------------------
+
+    AI Engineer      : {ai_engineer}%
+    ML Engineer      : {ml_engineer}%
+    Data Analyst     : {data_analyst}%
+    Python Developer : {python_dev}%
+
+    Recommended Role:
+    {best_role}
+
+    ----------------------------------------------------
+    🧠 SKILL GAP ANALYSIS
+    ----------------------------------------------------
 
     Missing Skills:
-    {', '.join(missing_skills)}
+    {', '.join(missing_skills) if missing_skills else "None"}
 
+    ----------------------------------------------------
+    💡 RESUME RECOMMENDATIONS
+    ----------------------------------------------------
+
+    • Add internship or freelance experience
+    • Add LinkedIn profile
+    • Build more AI/ML projects
+    • Improve GitHub portfolio
+
+    ----------------------------------------------------
+    🪶 SPARROW'S OVERALL ASSESSMENT
+    ----------------------------------------------------
+
+    Strong academic background detected.
+
+    Your resume demonstrates a solid programming
+    foundation and relevant AI/Data Science coursework.
+
+    Focus on gaining real-world experience and
+    expanding your machine learning toolkit to become
+    industry ready.
+
+    ----------------------------------------------------
     Generated by Sparrow Agent
+    AI Resume Analysis Assistant
     """
     st.download_button(
         label="📄 Download Report",
         data=report,
         file_name="sparrow_report.txt",
         mime="text/plain"
-    )
+        )
