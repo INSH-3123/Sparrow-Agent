@@ -41,6 +41,8 @@ from utils import (
     get_rating,
 )
 
+from intelligence import analyze_candidate 
+
 st.title("🪶 Sparrow Agent")
 
 st.write("Welcome to Sparrow Agent!")
@@ -78,6 +80,8 @@ if analyze:
     st.session_state.analyzed = True
     
 text = st.session_state.get("resume_text", "")
+
+strengths, weaknesses, suggestions = analyze_candidate(text)
 
 if st.session_state.analyzed:
 
@@ -331,23 +335,28 @@ if st.session_state.analyzed:
             )
         st.divider()
 
-        st.info(
-            """
-        ### 🪶 Sparrow's Overall Assessment
 
-        Your resume demonstrates a solid academic foundation with relevant technical skills.
 
-        **Strengths**
-        - Good programming foundation
-        - ATS-friendly structure
-        - Strong AI/Data Science coursework
+        st.subheader("🧠 Sparrow Intelligence")
 
-        **Next Priority**
-        Gain practical experience through projects or internships and continue expanding your ML toolkit.
-        """
-        ) 
+        col1, col2 = st.columns(2)
 
-        st.divider()
+        with col1:
+            st.markdown("### 💪 Strengths")
+
+            for strength in strengths:
+                st.success(strength)
+
+            st.markdown("### ⚠️ Weaknesses")
+
+            for weakness in weaknesses:
+                st.warning(weakness)
+
+        with col2:
+            st.markdown("### 💡 Suggestions")
+
+            for suggestion in suggestions:
+                st.info(suggestion)
 
         st.subheader("🎯 Career Match Dashboard")
         career_scores, best_role = analyze_career(text)

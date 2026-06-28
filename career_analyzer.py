@@ -14,7 +14,7 @@ def analyze_career(text):
 
     if "SQL" in text:
         ai_engineer += 5
-        data_analyst += 20
+        data_analyst += 20 
 
     if "MACHINE LEARNING" in text:
         ai_engineer += 15
