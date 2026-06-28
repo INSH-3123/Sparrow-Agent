@@ -43,6 +43,8 @@ from utils import (
 
 from intelligence import analyze_candidate 
 
+from career_coach import career_coach
+
 st.title("🪶 Sparrow Agent")
 
 st.write("Welcome to Sparrow Agent!")
@@ -403,6 +405,8 @@ if st.session_state.analyzed:
 
 
         st.divider()
+
+        advice = career_coach(text)
 
         st.subheader("🪶 Why Sparrow Recommended This")   
 
