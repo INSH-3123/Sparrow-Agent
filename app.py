@@ -45,6 +45,8 @@ from intelligence import analyze_candidate
 
 from career_coach import career_coach
 
+from ai_chat import ask_ai
+
 st.title("🪶 Sparrow Agent")
 
 st.write("Welcome to Sparrow Agent!")
@@ -480,10 +482,44 @@ if st.session_state.analyzed:
         rating,
         skills_found
     )
-   
+    
+    
     st.download_button(
         label="📄 Download Report",
         data=report,
         file_name="sparrow_report.txt",
         mime="text/plain"
         )
+
+    if st.button("✨ Analyze with Sparrow AI"):
+
+        with st.spinner("🪶 Sparrow AI is analyzing your report..."):
+
+            prompt = f"""
+    You are Sparrow Agent, an AI Career Coach.
+
+    Analyze the following Sparrow Career Report.
+
+    {report}
+
+    Respond in markdown.
+
+    Include:
+
+    # Overall Assessment
+
+    # Strengths
+
+    # Weaknesses
+
+    # Top 3 Skills to Learn
+
+    # Career Advice
+
+    Keep it under 200 words.
+    """
+
+            response = ask_ai(prompt)
+
+        st.subheader("🤖 Sparrow AI Career Mentor")
+        st.markdown(response)
