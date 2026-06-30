@@ -491,35 +491,69 @@ if st.session_state.analyzed:
         mime="text/plain"
         )
 
-    if st.button("✨ Analyze with Sparrow AI"):
-
-        with st.spinner("🪶 Sparrow AI is analyzing your report..."):
+    if st.button(
+        "✨ Analyze with Sparrow AI",
+        use_container_width=True
+    ):
 
             prompt = f"""
-    You are Sparrow Agent, an AI Career Coach.
+            You are Sparrow AI Career Mentor.
 
-    Analyze the following Sparrow Career Report.
+            The following is an official Sparrow Career Report generated after resume analysis,
+            ATS evaluation, career matching, skill-gap detection and career coaching.
 
-    {report}
+            Use the report as factual information.
 
-    Respond in markdown.
+            Do NOT recalculate scores.
 
-    Include:
+            Do NOT contradict the report.
 
-    # Overall Assessment
+            Instead, expand the findings into practical career guidance.
 
-    # Strengths
+            Sparrow Career Report:
 
-    # Weaknesses
+            {report}
 
-    # Top 3 Skills to Learn
+            Respond in Markdown.
 
-    # Career Advice
+            Use the following sections:
 
-    Keep it under 200 words.
-    """
+            # 📌 Career Summary
 
-            response = ask_ai(prompt)
+            Provide a short overview of the candidate's current profile.
 
-        st.subheader("🤖 Sparrow AI Career Mentor")
-        st.markdown(response)
+            # 💪 Key Strengths
+
+            Mention the strongest qualities.
+
+            # ⚠ Areas for Improvement
+
+            Mention the most important weaknesses.
+
+            # 📚 Recommended Learning Path
+
+            Recommend 3–5 technologies, certifications or skills.
+
+            # 🚀 Next Career Steps
+
+            Suggest practical actions for the next 3–6 months.
+
+            # ⭐ Final Advice
+
+            End with encouraging but realistic advice.
+
+            Keep the response concise, professional and under 250 words.
+            """
+
+            with st.spinner("🪶 Sparrow AI is analyzing your report... Please wait..."):
+                response = ask_ai(prompt)
+
+            st.toast("🪶 Sparrow AI analysis completed!")  
+
+            st.divider()
+
+            st.subheader("🪶 Sparrow AI Career Mentor")
+            st.caption("Powered by Google Gemini 2.5 Flash AI")
+
+            with st.container(border=True):
+                st.markdown(response)
