@@ -176,12 +176,37 @@ if st.session_state.analyzed:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-            with st.container(border=True):
-                st.metric(
-                    "📄 Resume Score",
-                    f"{score}/100"
-                )
-                st.progress(score / 100)
+        with st.container(border=True):
+
+            st.metric(
+                "📄 Resume Score",
+                f"{score}/100"
+            )
+
+            st.progress(score / 100)
+
+            with st.expander("🪶 Why this score?"):
+
+                if score >= 80:
+                    st.success("Excellent resume quality!")
+
+                elif score >= 60:
+                    st.info("Your resume is well structured with a few areas to improve.")
+
+                else:
+                    st.warning("Your resume needs significant improvements.")
+
+                st.markdown("### 📄 Resume Review")
+
+                st.write("✅ Clear contact information")
+
+                st.write("✅ Technical skills included")
+
+                st.write("✅ Education section present")
+
+                st.write("💡 Add measurable achievements")
+
+                st.write("💡 Strengthen project descriptions")
 
     ats_score, ats_sections = analyze_ats(text)
 
@@ -192,6 +217,38 @@ if st.session_state.analyzed:
                 f"{ats_score}/100"
             )
             st.progress(ats_score / 100)
+
+            with st.expander("🪶 Why this score?"):
+                if ats_score >= 80:
+                    st.success("Excellent ATS compatibility!")
+
+                elif ats_score >= 60:
+                    st.warning("Good ATS compatibility, but there is room for improvement.")
+
+                else:
+                    st.error("Your resume needs ATS optimization.")
+
+                st.markdown("### ✔ ATS Checklist")
+
+                if "Education" in ats_sections:
+                    st.write("✅ Education section detected")
+                else:
+                    st.write("⚠️ Education section missing")
+
+                if "Skills" in ats_sections:
+                    st.write("✅ Skills section detected")
+                else:
+                    st.write("⚠️ Skills section missing")
+
+                if "Projects" in ats_sections:
+                    st.write("✅ Projects section detected")
+                else:
+                    st.write("⚠️ Projects section missing")
+
+                if "Experience" in ats_sections:
+                    st.write("✅ Experience section detected")
+                else:
+                    st.write("⚠️ Experience section missing")
 
     if ats_score >= 80:
         st.success("✅ ATS Friendly Resume")
@@ -210,8 +267,29 @@ if st.session_state.analyzed:
                 "Career Readiness",
                 f"{career_score}%"
             )
+
             st.progress(career_score / 100)
-    st.divider()
+
+            with st.expander("🪶 Why this score?"):
+
+                if career_score >= 80:
+                    st.success("You're highly prepared for entry-level opportunities.")
+
+                elif career_score >= 60:
+                    st.info("You're on a good path. A few improvements can make you much stronger.")
+
+                else:
+                    st.warning("Your profile needs further development before applying confidently.")
+
+                st.markdown("### 🚀 Career Readiness Factors")
+
+                st.write(f"📄 Resume Quality: **{score}/100**")
+
+                st.write(f"🤖 ATS Compatibility: **{ats_score}/100**")
+
+                st.write("💼 Projects and technical skills improve readiness.")
+
+                st.write("📚 Certifications and portfolio can further strengthen your profile.")
 
 
     st.subheader("🎯 Skill Gap Analysis")
@@ -416,7 +494,7 @@ if st.session_state.analyzed:
 
         advice = career_coach(text)
 
-        st.subheader("🪶 Why Sparrow Recommended This")   
+        st.subheader("🪶 Why This Career Matches You")   
 
         with st.container(border=True):
             st.markdown("## 🎯 Best Career Match")
@@ -429,8 +507,8 @@ if st.session_state.analyzed:
         st.write("✅ SQL detected")
         st.write("✅ AI & Data Science degree")
         st.write("✅ Project experience")
-        st.write("❌ TensorFlow not found")
-        st.write("❌ Internship experience not found")  
+        st.write("❌ Learning TensorFlow will strengthen your profile ")
+        st.write("❌ Practical industry experience will make your resume more competitive")  
 
         st.info(f"""
         Sparrow selected **{best_role}** because your resume demonstrates strong technical skills and is the best overall match based on the detected technologies in your resume.

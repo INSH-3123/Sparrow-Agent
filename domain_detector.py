@@ -117,14 +117,14 @@ def detect_domain(resume_text):
         for keyword in keywords:
 
             if keyword in resume_text:
-            if keyword in [
-                "artificial intelligence",
-                "artificial intelligence & data science",
-                "artificial intelligence and data science"
-            ]:
-                scores[domain] += 5
-            else:
-                scores[domain] += 1
+                if keyword in [
+                    "artificial intelligence",
+                    "artificial intelligence & data science",
+                    "artificial intelligence and data science"
+                ]:
+                    scores[domain] += 5
+                else:
+                    scores[domain] += 1
 
     detected_domain = max(scores, key=scores.get)
 
