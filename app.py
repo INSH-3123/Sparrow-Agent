@@ -49,6 +49,8 @@ from career_coach import career_coach
 
 from ai_chat import ask_ai
 
+from career_profiles import CAREER_PROFILES
+
 st.title("🪶 Sparrow Agent")
 
 st.write("Welcome to Sparrow Agent!")
@@ -71,6 +73,8 @@ if upload_file is not None:
     st.session_state.resume_text = text    
 
     detected_domain, domain_scores = detect_domain(text)
+
+    career_profile = CAREER_PROFILES.get(detected_domain)
 
     st.success(f"🎯 Detected Domain: {detected_domain}")
 
@@ -293,14 +297,9 @@ if st.session_state.analyzed:
 
 
     st.subheader("🎯 Skill Gap Analysis")
-    required_skills = [
-        "PYTHON",
-        "SQL",
-        "MACHINE LEARNING",
-        "DEEP LEARNING",
-        "PANDAS",
-        "NUMPY"
-    ]
+
+    required_skills = career_profile["required_skills"]
+
     missing_skills = []
 
     for skill in required_skills:
@@ -309,7 +308,7 @@ if st.session_state.analyzed:
 
             missing_skills.append(skill)
 
-    st.write("Required Role: AI Engineer")
+    st.write(f"Career Domain: {detected_domain}")
     if len(missing_skills) == 0:
 
         st.success(
@@ -332,7 +331,7 @@ if st.session_state.analyzed:
         for skill in missing_skills:
             with st.container(border=True):
                 st.markdown(f"### ❌ {skill}")
-                st.caption(skill_info.get(skill, "Recommended skill for AI roles."))
+                st.caption(f"Recommended skill for {detected_domain}.")
 
     st.subheader("💡 Recommendations")
     col1, col2 = st.columns(2)
@@ -346,28 +345,8 @@ if st.session_state.analyzed:
 
                 for skill in missing_skills:
 
-                    if skill == "PANDAS":
-                        st.success(
-                            "📊 Pandas → Learn data cleaning, filtering, grouping and data analysis."
-                        )
-
-                    elif skill == "NUMPY":
-                        st.success(
-                            "🔢 NumPy → Learn arrays, matrices and numerical computations."
-                        )
-
-                    elif skill == "MACHINE LEARNING":
-                        st.success(
-                            "🤖 Machine Learning → Learn Scikit-Learn, model training and evaluation."
-                        )
-
-                    elif skill == "DEEP LEARNING":
-                        st.success(
-                            "🧠 Deep Learning → Learn TensorFlow, PyTorch and neural networks."
-                        )
-
-                    else:
-                        st.info(f"📖 Learn {skill}")
+                    for skill in missing_skills:
+                        st.success(f"📘 Learn {skill}")
             
 
     with col2:
@@ -375,22 +354,12 @@ if st.session_state.analyzed:
             
             if st.button("💼 Job Role Recommendations"):
 
-                roles = []
+                roles = career_profile["roles"]
 
-                if "PYTHON" in text.upper():
-                    roles.append("🐍 Python Developer")
-
-                if "SQL" in text.upper():
-                    roles.append("📊 Data Analyst")
-
-                if "MACHINE LEARNING" in text.upper():
-                    roles.append("🤖 AI Engineer")
-
-                if "DEEP LEARNING" in text.upper():
-                    roles.append("🧠 ML Intern")
+                st.subheader(f"💼 Recommended Roles for {detected_domain}")
 
                 for role in roles:
-                    st.success(role)   
+                    st.success(role)  
 
     st.subheader("📝 Resume Improvement Suggestions")
 
@@ -447,48 +416,20 @@ if st.session_state.analyzed:
                 st.info(suggestion)
 
         st.subheader("🎯 Career Match Dashboard")
-        career_scores, best_role = analyze_career(text)
-
-        ai_engineer = career_scores["AI Engineer"]
-        ml_engineer = career_scores["ML Engineer"]
-        data_analyst = career_scores["Data Analyst"]
-        python_dev = career_scores["Python Developer"]
-
-        career_scores = {
-            "AI Engineer": ai_engineer,
-            "ML Engineer": ml_engineer,
-            "Data Analyst": data_analyst,
-            "Python Developer": python_dev
-        }
+        career_scores, best_role = analyze_career(text, detected_domain)
 
         best_role = max(career_scores, key=career_scores.get)
 
-        col1, col2 = st.columns(2)
+        roles = career_profile["roles"]
 
-        with col1:
+        cols = st.columns(2)
 
-            with st.container(border=True):
-                st.markdown("### 🤖 AI Engineer")
-                st.metric("Match", f"{ai_engineer}%")
-                st.progress(ai_engineer/100)
-
-            with st.container(border=True):    
-                st.markdown("### 📊 Data Analyst")
-                st.metric("Match", f"{data_analyst}%")
-                st.progress(data_analyst / 100)
-
-        with col2:
-
-            with st.container(border=True):
-                st.markdown("### 🧠 ML Engineer")
-                st.metric("Match", f"{ml_engineer}%")
-                st.progress(ml_engineer / 100)
-            
-            with st.container(border=True): 
-                st.markdown("### 🐍 Python Developer")
-                st.metric("Match", f"{python_dev}%")
-                st.progress(python_dev / 100)
-
+        for i, role in enumerate(roles):
+            with cols[i % 2]:
+                with st.container(border=True):
+                    st.markdown(f"### 💼 {role}")
+                    st.metric("Match", f"{career_scores[role]}%")
+                    st.progress(career_scores[role] / 100)
 
         st.divider()
 
@@ -503,57 +444,18 @@ if st.session_state.analyzed:
                 best_role
             )
             
-        st.write("✅ Python detected")
-        st.write("✅ SQL detected")
-        st.write("✅ AI & Data Science degree")
-        st.write("✅ Project experience")
-        st.write("❌ Learning TensorFlow will strengthen your profile ")
-        st.write("❌ Practical industry experience will make your resume more competitive")  
+        for skill in career_profile["required_skills"]:
 
+            if skill in text.upper():
+                st.write(f"✅ {skill} detected")
+
+            else:
+                st.write(f"❌ {skill} not detected")
         st.info(f"""
         Sparrow selected **{best_role}** because your resume demonstrates strong technical skills and is the best overall match based on the detected technologies in your resume.
         """)
 
-        st.subheader("🤔 Why Not the Other Careers?")
-
-        with st.expander("🧠 ML Engineer"):
-            if "TENSORFLOW" not in text.upper():
-                st.write("❌ TensorFlow not found")
-
-            if "PYTORCH" not in text.upper():
-                st.write("❌ PyTorch not found")
-
-            if "NUMPY" not in text.upper():
-                st.write("❌ NumPy not found")
-
-            st.success("✔ Strong Machine Learning foundation detected.")
-
-        with st.expander("📊 Data Analyst"):
-            if "EXCEL" not in text.upper():
-                st.write("❌ Excel not found")
-
-            if "POWER BI" not in text.upper():
-                st.write("❌ Power BI not found")
-
-            if "TABLEAU" not in text.upper():
-                st.write("❌ Tableau not found")
-
-            st.success("✔ SQL skills detected.")
-
-        with st.expander("🐍 Python Developer"):
-            if "DJANGO" not in text.upper():
-                st.write("❌ Django not found")
-
-            if "FLASK" not in text.upper():
-                st.write("❌ Flask not found")
-
-            if "REACT" not in text.upper():
-                st.write("❌ React not found")
-
-            st.success("✔ Python skills detected.")    
-
-    today = get_today()
-
+        
     candidate = get_candidate_name(text)
 
     rating = get_rating(career_score)
