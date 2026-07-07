@@ -7,16 +7,20 @@ def analyze_career(text, detected_domain):
 
     profile = CAREER_PROFILES.get(detected_domain)
 
-    roles = profile["roles"]
-
     career_scores = {}
 
-    for role in roles:
+    aliases = {
+        "AUTOCAD": ["AUTOCAD", "AUTO CAD", "AUTO-CAD", "AUTODESK AUTOCAD"]
+    }
+
+    for role, skills in profile["roles"].items():
 
         score = 0
 
-        for skill in profile["required_skills"]:
-            if skill in text:
+        for skill in skills:
+            keywords = aliases.get(skill, [skill])
+
+            if any(keyword in text for keyword in keywords):
                 score += 15
 
         if "PROJECT" in text:
@@ -27,7 +31,7 @@ def analyze_career(text, detected_domain):
 
         score = min(score, 100)
 
-        career_scores[role] = score = score
+        career_scores[role] = score
 
     best_role = max(career_scores, key=career_scores.get)
 

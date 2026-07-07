@@ -300,12 +300,32 @@ if st.session_state.analyzed:
 
     required_skills = career_profile["required_skills"]
 
+    print(required_skills)
+
     missing_skills = []
+
+    aliases = {
+        "AUTOCAD": [
+            "AUTOCAD",
+            "AUTO CAD",
+            "AUTO-CAD",
+            "AUTODESK AUTOCAD"
+        ],
+
+        "STAAD": [
+            "STAAD",
+            "STAAD PRO",
+            "STAADPRO",
+            "STAAD.PRO",
+            "STAAD-PRO"
+        ]
+    }
 
     for skill in required_skills:
 
-        if skill not in text.upper():
+        keywords = aliases.get(skill, [skill])
 
+        if not any(keyword in text.upper() for keyword in keywords):
             missing_skills.append(skill)
 
     st.write(f"Career Domain: {detected_domain}")
@@ -339,20 +359,19 @@ if st.session_state.analyzed:
     with col1:
         if st.session_state.analyzed:
 
-            if st.button("🎯 Skill Recommendations"):
+            with st.expander("🎯 Skill Recommendations"):
 
                 st.subheader("📚 Learning Recommendations")
 
-                for skill in missing_skills:
+            unique_skills = sorted(set(missing_skills))
 
-                    for skill in missing_skills:
-                        st.success(f"📘 Learn {skill}")
-            
+            for skill in unique_skills:
+                st.success(f"📘 Learn {skill}")
 
     with col2:
         if st.session_state.analyzed:
             
-            if st.button("💼 Job Role Recommendations"):
+            with st.expander("💼 Job Role Recommendations"):
 
                 roles = career_profile["roles"]
 
@@ -420,7 +439,7 @@ if st.session_state.analyzed:
 
         best_role = max(career_scores, key=career_scores.get)
 
-        roles = career_profile["roles"]
+        roles = career_profile["roles"].keys()
 
         cols = st.columns(2)
 
@@ -444,13 +463,34 @@ if st.session_state.analyzed:
                 best_role
             )
             
+        aliases = {
+            "AUTOCAD": [
+                "AUTOCAD",
+                "AUTO CAD",
+                "AUTO-CAD",
+                "AUTODESK AUTOCAD"
+            ],
+
+            "STAAD": [
+                "STAAD",
+                "STAAD PRO",
+                "STAAD-PRO",
+                "STAADPRO",
+                "STAAD.PRO"
+            ]
+        }
+
         for skill in career_profile["required_skills"]:
 
-            if skill in text.upper():
+            keywords = aliases.get(skill, [skill])
+
+            if any(keyword in text.upper() for keyword in keywords):
                 st.write(f"✅ {skill} detected")
 
             else:
                 st.write(f"❌ {skill} not detected")
+
+
         st.info(f"""
         Sparrow selected **{best_role}** because your resume demonstrates strong technical skills and is the best overall match based on the detected technologies in your resume.
         """)

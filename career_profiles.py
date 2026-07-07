@@ -1,28 +1,77 @@
 CAREER_PROFILES = {
 
     "AI & Data Science": {
-        "roles": [
-            "AI Engineer",
-            "ML Engineer",
-            "Data Scientist"
-        ],
-        "required_skills": [
+        "roles": {
+            "AI Engineer": [
+                "PYTHON",
+                "MACHINE LEARNING",
+                "DEEP LEARNING",
+                "TENSORFLOW",
+                "PYTORCH"
+            ],
+
+            "ML Engineer": [
+                "PYTHON",
+                "MACHINE LEARNING",
+                "SCIKIT-LEARN",
+                "NUMPY"
+            ],
+
+            "Data Scientist": [
+                "PYTHON",
+                "PANDAS",
+                "NUMPY",
+                "SQL",
+                "DATA VISUALIZATION"
+            ]
+        },
+
+         "required_skills": [
             "PYTHON",
-            "SQL",
             "MACHINE LEARNING",
             "DEEP LEARNING",
+            "SQL",
             "PANDAS",
             "NUMPY"
         ]
     },
 
+
     "Software Engineering": {
-        "roles": [
-            "Software Engineer",
-            "Backend Developer",
-            "Frontend Developer",
-            "Full Stack Developer"
-        ],
+        "roles": {
+            "Software Engineer": [
+                "JAVA",
+                "PYTHON",
+                "SQL",
+                "GIT",
+                "DATA STRUCTURES"
+            ],
+
+            "Backend Developer": [
+                "PYTHON",
+                "API",
+                "SQL",
+                "DATABASE",
+                "FLASK"
+            ],
+
+            "Frontend Developer": [
+                "HTML",
+                "CSS",
+                "JAVASCRIPT",
+                "REACT",
+                "GIT"
+            ],
+
+            "Full Stack Developer": [
+                "REACT",
+                "PYTHON",
+                "SQL",
+                "API",
+                "GIT"
+            ]
+        },
+
         "required_skills": [
             "JAVA",
             "PYTHON",
@@ -34,11 +83,32 @@ CAREER_PROFILES = {
     },
 
     "Cybersecurity": {
-        "roles": [
-            "Cybersecurity Analyst",
-            "Security Engineer",
-            "Penetration Tester"
-        ],
+        "roles": {
+            "Cybersecurity Analyst": [
+                "NETWORK SECURITY",
+                "WIRESHARK",
+                "LINUX",
+                "KALI",
+                "CRYPTOGRAPHY"
+            ],
+
+            "Security Engineer": [
+                "NETWORK SECURITY",
+                "FIREWALL",
+                "LINUX",
+                "SIEM",
+                "PYTHON"
+            ],
+
+            "Penetration Tester": [
+                "KALI",
+                "METASPLOIT",
+                "NMAP",
+                "BURP SUITE",
+                "LINUX"
+            ]
+        },
+
         "required_skills": [
             "KALI",
             "WIRESHARK",
@@ -48,11 +118,32 @@ CAREER_PROFILES = {
     },
 
     "Cloud Computing": {
-        "roles": [
-            "Cloud Engineer",
-            "DevOps Engineer",
-            "Cloud Architect"
-        ],
+        "roles": {
+            "Cloud Engineer": [
+                "AWS",
+                "DOCKER",
+                "LINUX",
+                "KUBERNETES",
+                "TERRAFORM"
+            ],
+
+            "DevOps Engineer": [
+                "DOCKER",
+                "JENKINS",
+                "KUBERNETES",
+                "GIT",
+                "LINUX"
+            ],
+
+            "Cloud Architect": [
+                "AWS",
+                "AZURE",
+                "TERRAFORM",
+                "KUBERNETES",
+                "NETWORKING"
+            ]
+        },
+
         "required_skills": [
             "AWS",
             "AZURE",
@@ -63,11 +154,32 @@ CAREER_PROFILES = {
     },
 
     "Mechanical Engineering": {
-        "roles": [
-            "Mechanical Design Engineer",
-            "CAD Engineer",
-            "Manufacturing Engineer"
-        ],
+                "roles": {
+            "Mechanical Design Engineer": [
+                "SOLIDWORKS",
+                "AUTOCAD",
+                "CATIA",
+                "GD&T",
+                "3D MODELING"
+            ],
+
+            "CAD Engineer": [
+                "AUTOCAD",
+                "SOLIDWORKS",
+                "CATIA",
+                "DRAWINGS",
+                "MODELING"
+            ],
+
+            "Manufacturing Engineer": [
+                "THERMODYNAMICS",
+                "MANUFACTURING",
+                "QUALITY CONTROL",
+                "CAD",
+                "LEAN"
+            ]
+        },
+
         "required_skills": [
             "AUTOCAD",
             "SOLIDWORKS",
@@ -77,11 +189,32 @@ CAREER_PROFILES = {
     },
 
     "Civil Engineering": {
-        "roles": [
-            "Civil Engineer",
-            "Structural Engineer",
-            "Site Engineer"
-        ],
+        "roles": {
+            "Civil Engineer": [
+                "AUTOCAD",
+                "SURVEYING",
+                "ESTIMATION",
+                "CONSTRUCTION",
+                "SITE MANAGEMENT"
+            ],
+
+            "Structural Engineer": [
+                "STAAD",
+                "REVIT",
+                "STRUCTURAL ANALYSIS",
+                "AUTOCAD",
+                "DESIGN"
+            ],
+
+            "Site Engineer": [
+                "SITE MANAGEMENT",
+                "AUTOCAD",
+                "SURVEYING",
+                "QUALITY CONTROL",
+                "CONSTRUCTION"
+            ]
+        },
+
         "required_skills": [
             "AUTOCAD",
             "STAAD",
@@ -91,11 +224,32 @@ CAREER_PROFILES = {
     },
 
     "Electronics": {
-        "roles": [
-            "Embedded Engineer",
-            "VLSI Engineer",
-            "IoT Engineer"
-        ],
+        "roles": {
+            "Embedded Engineer": [
+                "ARDUINO",
+                "EMBEDDED C",
+                "MICROCONTROLLERS",
+                "PCB",
+                "IOT"
+            ],
+
+            "VLSI Engineer": [
+                "VERILOG",
+                "VHDL",
+                "FPGA",
+                "VLSI",
+                "DIGITAL DESIGN"
+            ],
+
+            "IoT Engineer": [
+                "ARDUINO",
+                "RASPBERRY PI",
+                "SENSORS",
+                "IOT",
+                "EMBEDDED C"
+            ]
+        },
+
         "required_skills": [
             "ARDUINO",
             "VLSI",
@@ -105,11 +259,32 @@ CAREER_PROFILES = {
     },
 
     "Business & Management": {
-        "roles": [
-            "Business Analyst",
-            "Marketing Executive",
-            "Operations Manager"
-        ],
+       "roles": {
+            "Business Analyst": [
+                "EXCEL",
+                "SQL",
+                "POWER BI",
+                "COMMUNICATION",
+                "ANALYSIS"
+            ],
+
+            "Marketing Executive": [
+                "MARKETING",
+                "SEO",
+                "SOCIAL MEDIA",
+                "CONTENT",
+                "COMMUNICATION"
+            ],
+
+            "Operations Manager": [
+                "MANAGEMENT",
+                "LEADERSHIP",
+                "PLANNING",
+                "OPERATIONS",
+                "COMMUNICATION"
+            ]
+        },
+
         "required_skills": [
             "MARKETING",
             "FINANCE",
