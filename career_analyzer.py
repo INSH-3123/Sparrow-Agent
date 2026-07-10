@@ -1,5 +1,12 @@
 from career_profiles import CAREER_PROFILES
 
+from aliases import ALIASES
+
+CORE_SKILL_SCORE = 20
+IMPORTANT_SKILL_SCORE = 15
+BONUS_SKILL_SCORE = 5
+PROJECT_SCORE = 15
+EXPERIENCE_SCORE = 20
 
 def analyze_career(text, detected_domain):
 
@@ -9,25 +16,37 @@ def analyze_career(text, detected_domain):
 
     career_scores = {}
 
-    aliases = {
-        "AUTOCAD": ["AUTOCAD", "AUTO CAD", "AUTO-CAD", "AUTODESK AUTOCAD"]
-    }
-
-    for role, skills in profile["roles"].items():
+    for role, role_data in profile["roles"].items():
 
         score = 0
 
-        for skill in skills:
-            keywords = aliases.get(skill, [skill])
+        core_skills = role_data["core_skills"]
+        important_skills = role_data["important_skills"]
+        bonus_skills = role_data["bonus_skills"]
+
+        for skill in core_skills:
+            keywords = ALIASES.get(skill.upper(), [skill])
 
             if any(keyword in text for keyword in keywords):
-                score += 15
+                score += CORE_SKILL_SCORE
+
+        for skill in important_skills:
+            keywords = ALIASES.get(skill.upper(), [skill])
+
+            if any(keyword in text for keyword in keywords):
+                score += IMPORTANT_SKILL_SCORE
+
+        for skill in bonus_skills:
+            keywords = ALIASES.get(skill.upper(), [skill])
+
+            if any(keyword in text for keyword in keywords):
+                score += BONUS_SKILL_SCORE
 
         if "PROJECT" in text:
-            score += 10
+            score += PROJECT_SCORE
 
         if "EXPERIENCE" in text:
-            score += 10
+            score += EXPERIENCE_SCORE
 
         score = min(score, 100)
 

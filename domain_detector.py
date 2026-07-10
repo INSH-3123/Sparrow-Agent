@@ -1,3 +1,16 @@
+EXACT_MATCH_SCORE = 5
+NORMAL_MATCH_SCORE = 1
+
+HIGH_PRIORITY_KEYWORDS = [
+    "artificial intelligence",
+    "artificial intelligence & data science",
+    "artificial intelligence and data science",
+    "machine learning",
+    "deep learning",
+]
+
+from aliases import ALIASES
+
 DOMAINS = {
 
     "AI & Data Science": [
@@ -116,16 +129,28 @@ def detect_domain(resume_text):
 
         for keyword in keywords:
 
-            if keyword in resume_text:
-                if keyword in [
-                    "artificial intelligence",
-                    "artificial intelligence & data science",
-                    "artificial intelligence and data science"
-                ]:
-                    scores[domain] += 5
+            keyword_aliases = ALIASES.get(keyword.upper(), [keyword])
+
+            if any(alias.lower() in resume_text for alias in keyword_aliases):
+
+                if keyword in HIGH_PRIORITY_KEYWORDS:
+                    scores[domain] += EXACT_MATCH_SCORE
                 else:
-                    scores[domain] += 1
+                    scores[domain] += NORMAL_MATCH_SCORE
+
+    highest_score = max(scores.values())
+
+    if highest_score == 0:
+        return "Unknown", scores, 0
+
+    total_score = sum(scores.values())
+
+    confidence = int(
+        highest_score /
+        total_score
+        * 100
+    ) if total_score else 0
 
     detected_domain = max(scores, key=scores.get)
 
-    return detected_domain, scores
+    return detected_domain, scores, confidence

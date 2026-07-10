@@ -2,31 +2,59 @@ CAREER_PROFILES = {
 
     "AI & Data Science": {
         "roles": {
-            "AI Engineer": [
-                "PYTHON",
-                "MACHINE LEARNING",
-                "DEEP LEARNING",
-                "TENSORFLOW",
-                "PYTORCH"
-            ],
+            "AI Engineer": {
 
-            "ML Engineer": [
-                "PYTHON",
-                "MACHINE LEARNING",
-                "SCIKIT-LEARN",
-                "NUMPY"
-            ],
+                "core_skills": [
+                    "PYTHON",
+                    "MACHINE LEARNING"
+                ],
 
-            "Data Scientist": [
-                "PYTHON",
-                "PANDAS",
-                "NUMPY",
-                "SQL",
-                "DATA VISUALIZATION"
-            ]
+                "important_skills": [
+                    "DEEP LEARNING",
+                    "TENSORFLOW"
+                ],
+
+                "bonus_skills": [
+                    "PYTORCH"
+                ]
+            },
+
+            "ML Engineer": {
+
+                "core_skills": [
+                    "PYTHON",
+                    "MACHINE LEARNING"
+                ],
+
+                "important_skills": [
+                    "SCIKIT-LEARN",
+                    "NUMPY"
+                ],
+
+                "bonus_skills": [
+                    "PANDAS"
+                ]
+            },
+
+            "Data Scientist": {
+
+                "core_skills": [
+                    "PYTHON",
+                    "SQL"
+                ],
+
+                "important_skills": [
+                    "PANDAS",
+                    "NUMPY"
+                ],
+
+                "bonus_skills": [
+                    "DATA VISUALIZATION"
+                ]
+            }
         },
 
-         "required_skills": [
+        "required_skills": [
             "PYTHON",
             "MACHINE LEARNING",
             "DEEP LEARNING",
@@ -39,37 +67,73 @@ CAREER_PROFILES = {
 
     "Software Engineering": {
         "roles": {
-            "Software Engineer": [
-                "JAVA",
-                "PYTHON",
-                "SQL",
-                "GIT",
-                "DATA STRUCTURES"
-            ],
+            "Software Engineer": {
 
-            "Backend Developer": [
-                "PYTHON",
-                "API",
-                "SQL",
-                "DATABASE",
-                "FLASK"
-            ],
+                "core_skills": [
+                    "JAVA",
+                    "PYTHON"
+                ],
 
-            "Frontend Developer": [
-                "HTML",
-                "CSS",
-                "JAVASCRIPT",
-                "REACT",
-                "GIT"
-            ],
+                "important_skills": [
+                    "SQL",
+                    "DATA STRUCTURES"
+                ],
 
-            "Full Stack Developer": [
-                "REACT",
-                "PYTHON",
-                "SQL",
-                "API",
-                "GIT"
-            ]
+                "bonus_skills": [
+                    "GIT"
+                ]
+            },
+
+            "Backend Developer": {
+
+                "core_skills": [
+                    "PYTHON",
+                    "API"
+                ],
+
+                "important_skills": [
+                    "SQL",
+                    "DATABASE"
+                ],
+
+                "bonus_skills": [
+                    "FLASK"
+                ]
+            },
+
+            "Frontend Developer": {
+
+                "core_skills": [
+                    "HTML",
+                    "CSS"
+                ],
+
+                "important_skills": [
+                    "JAVASCRIPT",
+                    "REACT"
+                ],
+
+                "bonus_skills": [
+                    "GIT"
+                ]
+            },
+
+            "Full Stack Developer": {
+
+                "core_skills": [
+                    "REACT",
+                    "PYTHON"
+                ],
+
+                "important_skills": [
+                    "SQL",
+                    "API"
+                ],
+
+                "bonus_skills": [
+                    "GIT"
+                ]
+            }
         },
 
         "required_skills": [
@@ -84,29 +148,52 @@ CAREER_PROFILES = {
 
     "Cybersecurity": {
         "roles": {
-            "Cybersecurity Analyst": [
-                "NETWORK SECURITY",
-                "WIRESHARK",
-                "LINUX",
-                "KALI",
-                "CRYPTOGRAPHY"
-            ],
+            "Cybersecurity Analyst": {
 
-            "Security Engineer": [
-                "NETWORK SECURITY",
-                "FIREWALL",
-                "LINUX",
-                "SIEM",
-                "PYTHON"
-            ],
+                "core_skills": [
+                    "NETWORK SECURITY",
+                    "WIRESHARK"
+                ],
 
-            "Penetration Tester": [
-                "KALI",
-                "METASPLOIT",
-                "NMAP",
-                "BURP SUITE",
-                "LINUX"
-            ]
+                "important_skills": [
+                    "LINUX",
+                    "CRYPTOGRAPHY"
+                ],
+
+                "bonus_skills": [
+                    "KALI"
+                ]
+            },
+
+            "Penetration Tester": {
+                "core_skills": [
+                    "KALI",
+                    "WIRESHARK"
+                ],  
+
+                "important_skills": [
+                    "NETWORK SECURITY", 
+                    "CRYPTOGRAPHY"
+                ],  
+
+                "bonus_skills": [
+                    "LINUX"
+                ]   
+            },
+
+            "Security Engineer": {
+                "core_skills": [
+                    "NETWORK SECURITY",
+                    "CRYPTOGRAPHY"
+                ],  
+                "important_skills": [
+                    "KALI",
+                    "WIRESHARK"
+                ],
+                "bonus_skills": [
+                    "LINUX"
+                ]
+            }
         },
 
         "required_skills": [
@@ -119,29 +206,59 @@ CAREER_PROFILES = {
 
     "Cloud Computing": {
         "roles": {
-            "Cloud Engineer": [
-                "AWS",
-                "DOCKER",
-                "LINUX",
-                "KUBERNETES",
-                "TERRAFORM"
-            ],
+            "Cloud Engineer": {
 
-            "DevOps Engineer": [
-                "DOCKER",
-                "JENKINS",
-                "KUBERNETES",
-                "GIT",
-                "LINUX"
-            ],
+                "core_skills": [
+                    "AWS",
+                    "DOCKER"
+                ],
 
-            "Cloud Architect": [
-                "AWS",
-                "AZURE",
-                "TERRAFORM",
-                "KUBERNETES",
-                "NETWORKING"
-            ]
+                "important_skills": [
+                    "KUBERNETES",
+                    "LINUX"
+                ],
+
+                "bonus_skills": [
+                    "TERRAFORM"
+                ]
+            },
+
+            "DevOps Engineer": {    
+                
+                "core_skills": [
+                    "AWS",
+                    "DOCKER"
+                ],
+
+                "important_skills": [
+                    "KUBERNETES",
+                    "CI/CD",
+                    "CI_CD",
+                    "JENKINS",
+                    "GITHUB ACTIONS"
+                ],
+
+                "bonus_skills": [
+                    "TERRAFORM"
+                ]
+            },
+
+            "Cloud Architect": {
+
+                "core_skills": [
+                    "AWS",
+                    "AZURE"
+                ],  
+
+                "important_skills": [
+                    "DOCKER",
+                    "KUBERNETES"
+                ],  
+
+                "bonus_skills": [
+                    "TERRAFORM"
+                ]   
+            }
         },
 
         "required_skills": [
@@ -154,30 +271,57 @@ CAREER_PROFILES = {
     },
 
     "Mechanical Engineering": {
-                "roles": {
-            "Mechanical Design Engineer": [
-                "SOLIDWORKS",
-                "AUTOCAD",
-                "CATIA",
-                "GD&T",
-                "3D MODELING"
-            ],
+        "roles": {
+            "Mechanical Design Engineer": {
 
-            "CAD Engineer": [
-                "AUTOCAD",
-                "SOLIDWORKS",
-                "CATIA",
-                "DRAWINGS",
-                "MODELING"
-            ],
+                "core_skills": [
+                    "SOLIDWORKS",
+                    "AUTOCAD"
+                ],
 
-            "Manufacturing Engineer": [
-                "THERMODYNAMICS",
-                "MANUFACTURING",
-                "QUALITY CONTROL",
-                "CAD",
-                "LEAN"
-            ]
+                "important_skills": [
+                    "CATIA",
+                    "GD&T"
+                ],
+
+                "bonus_skills": [
+                    "3D MODELING"
+                ]
+            },
+            "Thermal Engineer": {
+
+                "core_skills": [
+                    "THERMODYNAMICS",
+                    "HEAT TRANSFER"
+                ],
+
+                "important_skills": [
+                    "CFD",
+                    "MATLAB"
+                ],
+
+                "bonus_skills": [
+                    "FLUID MECHANICS"
+                ]
+            },
+
+            "Manufacturing Engineer": {     
+                    
+                "core_skills": [
+                    "CNC",
+                    "LEAN",
+                    "MANUFACTURING"
+                ],
+
+                "important_skills": [
+                    "QUALITY CONTROL",
+                    "PROCESS OPTIMIZATION"
+                ],
+
+                "bonus_skills": [
+                    "INDUSTRIAL ENGINEERING"
+                ]
+            }
         },
 
         "required_skills": [
@@ -190,29 +334,46 @@ CAREER_PROFILES = {
 
     "Civil Engineering": {
         "roles": {
-            "Civil Engineer": [
-                "AUTOCAD",
-                "SURVEYING",
-                "ESTIMATION",
-                "CONSTRUCTION",
-                "SITE MANAGEMENT"
-            ],
+            "Civil Engineer": {
+                "core_skills": [
+                    "AUTOCAD",
+                    "SURVEYING"
+                ],
+                "important_skills": [
+                    "ESTIMATION",
+                    "CONSTRUCTION"
+                ],
+                "bonus_skills": [
+                    "SITE MANAGEMENT"
+                ]
+            },
+            "Structural Engineer": {
+                "core_skills": [
+                    "STAAD",
+                    "REVIT"
+                ],
+                "important_skills": [
+                    "STRUCTURAL ANALYSIS",
+                    "CONSTRUCTION"
+                ],
+                "bonus_skills": [
+                    "PROJECT MANAGEMENT"
+                ]
+            },
 
-            "Structural Engineer": [
-                "STAAD",
-                "REVIT",
-                "STRUCTURAL ANALYSIS",
-                "AUTOCAD",
-                "DESIGN"
-            ],
-
-            "Site Engineer": [
-                "SITE MANAGEMENT",
-                "AUTOCAD",
-                "SURVEYING",
-                "QUALITY CONTROL",
-                "CONSTRUCTION"
-            ]
+            "Construction Manager": {
+                "core_skills": [
+                    "PROJECT MANAGEMENT",
+                    "CONSTRUCTION"
+                ],
+                "important_skills": [
+                    "ESTIMATION",
+                    "SITE MANAGEMENT"
+                ],
+                "bonus_skills": [
+                    "BUDGETING"
+                ]
+            }
         },
 
         "required_skills": [
@@ -225,29 +386,49 @@ CAREER_PROFILES = {
 
     "Electronics": {
         "roles": {
-            "Embedded Engineer": [
-                "ARDUINO",
-                "EMBEDDED C",
-                "MICROCONTROLLERS",
-                "PCB",
-                "IOT"
-            ],
+            "Electronics Engineer": {
+                "core_skills": [
+                    "CIRCUIT DESIGN",
+                    "PCB DESIGN"
+                ],
+                "important_skills": [
+                    "MICROCONTROLLERS",
+                    "EMBEDDED SYSTEMS"
+                ],
+                "bonus_skills": [
+                    "VLSI DESIGN"
+                ]
+            },
 
-            "VLSI Engineer": [
-                "VERILOG",
-                "VHDL",
-                "FPGA",
-                "VLSI",
-                "DIGITAL DESIGN"
-            ],
+            "Embedded Systems Engineer": {
+                "core_skills": [
+                    "EMBEDDED C",
+                    "MICROCONTROLLERS"
+                ],
+                "important_skills": [
+                    "RTOS",
+                    "PCB DESIGN"
+                ],
+                "bonus_skills": [
+                    "IOT"
+                ]
+            },
 
-            "IoT Engineer": [
-                "ARDUINO",
-                "RASPBERRY PI",
-                "SENSORS",
-                "IOT",
-                "EMBEDDED C"
-            ]
+            "VLSI Engineer": {
+                "core_skills": [                                        
+                    "VLSI DESIGN",
+                    "VERILOG"
+                ],
+                "important_skills": [       
+                        
+                    "FPGA",
+                    "ASIC DESIGN"
+                ],  
+
+                "bonus_skills": [
+                    "DIGITAL SIGNAL PROCESSING"
+                ]
+            }
         },
 
         "required_skills": [
@@ -260,29 +441,50 @@ CAREER_PROFILES = {
 
     "Business & Management": {
        "roles": {
-            "Business Analyst": [
-                "EXCEL",
-                "SQL",
-                "POWER BI",
-                "COMMUNICATION",
-                "ANALYSIS"
-            ],
+            "Business Analyst": {
+                "core_skills": [
+                    "BUSINESS ANALYSIS",
+                    "DATA ANALYSIS"
+                ],
+                "important_skills": [
+                    "SQL",
+                    "EXCEL"
+                ],
+                "bonus_skills": [
+                    "POWER BI",
+                    "POWERBI",
+                    "MICROSOFT POWER BI"
+                ]
+            },
 
-            "Marketing Executive": [
-                "MARKETING",
-                "SEO",
-                "SOCIAL MEDIA",
-                "CONTENT",
-                "COMMUNICATION"
-            ],
+            "Project Manager": {
+                "core_skills": [
+                    "PROJECT MANAGEMENT",
+                    "AGILE METHODOLOGIES"
+                ],
+                "important_skills": [
+                    "RISK MANAGEMENT",
+                    "BUDGETING"
+                ],
+                "bonus_skills": [
+                    "SCRUM"
+                ]
+            },
 
-            "Operations Manager": [
-                "MANAGEMENT",
-                "LEADERSHIP",
-                "PLANNING",
-                "OPERATIONS",
-                "COMMUNICATION"
-            ]
+            "Marketing Manager": {
+                "core_skills": [
+                    "MARKETING STRATEGY",
+                    "DIGITAL MARKETING"
+                ],
+                "important_skills": [
+                    "SEO",
+                    "CONTENT CREATION"
+                ],
+                "bonus_skills": [
+                    "SOCIAL MEDIA MANAGEMENT"
+                ]
+            }
+
         },
 
         "required_skills": [

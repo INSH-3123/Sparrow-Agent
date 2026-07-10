@@ -2,9 +2,9 @@ import streamlit as st
 
 from ats_score import calculate_ats_score
 
-def analyze_resume(text):
+from career_readiness import calculate_career_readiness
 
-    st.error("🔥 DEBUG: NEW resume_analyzer.py is running")
+def analyze_resume(text, detected_domain, career_profile):
 
     st.subheader("Resume Analysis")
 
@@ -73,8 +73,11 @@ def analyze_resume(text):
 
     ats_score, ats_breakdown = calculate_ats_score(text)
 
-    st.write(breakdown)
-    st.write(ats_breakdown)
+    career_score, career_breakdown = calculate_career_readiness(
+        text,
+        resume_score,
+        ats_score
+    )
 
     st.subheader("📊 Dashboard Overview")
     
@@ -150,8 +153,6 @@ def analyze_resume(text):
     else:
         st.error("❌ ATS Optimization Needed")
 
-    career_score = int((resume_score + ats_score) / 2)
-
     with col3:
         with st.container(border=True):
             st.metric(
@@ -159,6 +160,28 @@ def analyze_resume(text):
                 f"{career_score}%"
             )
             st.progress(career_score / 100)
+
+    st.subheader("🚀 Career Readiness Breakdown")
+
+    MAX_CAREER = {
+        "Projects": 20,
+        "Experience": 20,
+        "GitHub": 10,
+        "Portfolio": 10,
+        "Certifications": 10,
+        "Communication": 10,
+        "LinkedIn": 5,
+        "Resume Quality": 10,
+        "ATS Quality": 5,
+    }
+    
+    for category, score in career_breakdown.items():
+        max_score = MAX_CAREER.get(category, 0)
+
+        st.write(f"**{category}**")
+        st.progress(score / max_score if max_score else 0)
+        st.caption(f"{score}/{max_score}")
+
     st.divider()
 
 
@@ -310,4 +333,10 @@ def analyze_resume(text):
             ) 
 
             st.divider()
-        return score, ats_score, career_score, missing_skills
+        return (
+            resume_score,
+            ats_score,
+            career_score,
+            missing_skills,
+            skills_found
+        )
