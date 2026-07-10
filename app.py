@@ -51,6 +51,10 @@ from ai_chat import ask_ai
 
 from career_profiles import CAREER_PROFILES
 
+from resume_score import calculate_resume_score
+
+from ats_score import calculate_ats_score
+
 st.title("🪶 Sparrow Agent")
 
 st.write("Welcome to Sparrow Agent!")
@@ -159,22 +163,10 @@ if st.session_state.analyzed:
 
     st.info(summary)    
 
-       
-    score = 0
+    resume_score, breakdown = calculate_resume_score(text)
 
-    if "EDUCATION" in text.upper():
-        score += 25
+    ats_score, ats_breakdown = calculate_ats_score(text)
 
-    if "SKILLS" in text.upper():
-        score += 25
-
-    if "PROJECTS" in text.upper():
-        score += 25
-
-    if "EXPERIENCE" in text.upper():
-        score += 25 
-
-    
     st.subheader("📊 Dashboard Overview")
     
     col1, col2, col3 = st.columns(3)
@@ -184,17 +176,39 @@ if st.session_state.analyzed:
 
             st.metric(
                 "📄 Resume Score",
-                f"{score}/100"
+                f"{resume_score}/100"
             )
 
-            st.progress(score / 100)
+            st.progress(resume_score / 100)
+
+            st.subheader("📄 Resume Score Breakdown")
+
+            MAX_SCORES = {
+                "Education": 15,
+                "Relevant Skills": 20,
+                "Projects": 20,
+                "Experience": 20,
+                "Certifications": 10,
+                "Achievements": 5,
+                "Portfolio": 5,
+                "GitHub": 5,
+                "LinkedIn": 5,
+                "Formatting": 5,
+            }
+
+            for category, score in breakdown.items():
+                max_score = MAX_SCORES[category]
+
+                st.write(f"**{category}**")
+                st.progress(score / max_score)
+                st.caption(f"{score}/{max_score}")
 
             with st.expander("🪶 Why this score?"):
 
-                if score >= 80:
+                if resume_score >= 80:
                     st.success("Excellent resume quality!")
 
-                elif score >= 60:
+                elif resume_score >= 60:
                     st.info("Your resume is well structured with a few areas to improve.")
 
                 else:
@@ -263,7 +277,7 @@ if st.session_state.analyzed:
     else:
         st.error("❌ ATS Optimization Needed")
 
-    career_score = int((score + ats_score) / 2)
+    career_score = int((resume_score + ats_score) / 2)
 
     with col3:
         with st.container(border=True):

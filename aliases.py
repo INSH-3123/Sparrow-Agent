@@ -59,3 +59,30 @@ ALIASES = {
         "AMAZON WEB SERVICES"
     ],
 }
+
+PROJECT_TECHNOLOGIES = [
+
+    "PYTHON",
+
+    "JAVA",
+
+    "SQL",
+
+    "REACT",
+
+    "NODEJS",
+
+    "DOCKER",
+
+    "AWS",
+
+    "SUPABASE",
+
+    "FLUTTER",
+
+    "DJANGO",
+
+    "FASTAPI",
+
+    "MONGODB"
+]

@@ -1,6 +1,10 @@
 import streamlit as st
 
+from ats_score import calculate_ats_score
+
 def analyze_resume(text):
+
+    st.error("🔥 DEBUG: NEW resume_analyzer.py is running")
 
     st.subheader("Resume Analysis")
 
@@ -63,50 +67,50 @@ def analyze_resume(text):
     st.info(summary)    
 
     
-    score = 0
+    from resume_score import calculate_resume_score
 
-    if "EDUCATION" in text.upper():
-        score += 25
+    resume_score, breakdown = calculate_resume_score(text)
 
-    if "SKILLS" in text.upper():
-        score += 25
+    ats_score, ats_breakdown = calculate_ats_score(text)
 
-    if "PROJECTS" in text.upper():
-        score += 25
+    st.write(breakdown)
+    st.write(ats_breakdown)
 
-    if "EXPERIENCE" in text.upper():
-        score += 25 
-
-    
     st.subheader("📊 Dashboard Overview")
     
     col1, col2, col3 = st.columns(3)
 
     with col1:
-            with st.container(border=True):
-                st.metric(
-                    "📄 Resume Score",
-                    f"{score}/100"
-                )
-                st.progress(score / 100)
+        with st.container(border=True):
+            st.metric(
+                "📄 Resume Score",
+                f"{resume_score}/100"
+            )
+            st.progress(resume_score / 100)
+        
+    st.subheader("📄 Resume Score Breakdown")
 
-    ats_score = 0
+    MAX_SCORES = {
+        "Education": 15,
+        "Relevant Skills": 20,
+        "Projects": 20,
+        "Experience": 20,
+        "Certifications": 10,
+        "Achievements": 5,
+        "Portfolio": 5,
+        "GitHub": 5,
+        "LinkedIn": 5,
+        "Formatting": 5,
+    }
 
-    if "EDUCATION" in text.upper():
-        ats_score += 20
+    for category, score in breakdown.items():
+        max_score = MAX_SCORES.get(category, 0)
 
-    if "SKILLS" in text.upper():
-        ats_score += 20
+        st.write(f"**{category}**")
+        st.progress(score / max_score if max_score else 0)
+        st.caption(f"{score}/{max_score}")
 
-    if "PROJECT" in text.upper():
-        ats_score += 20
-
-    if "EXPERIENCE" in text.upper():
-        ats_score += 20
-
-    if "CERTIFICATION" in text.upper():
-        ats_score += 20
-
+    
     with col2:
         with st.container(border=True):
             st.metric(
@@ -114,6 +118,28 @@ def analyze_resume(text):
                 f"{ats_score}/100"
             )
             st.progress(ats_score / 100)
+
+    st.subheader("📑 ATS Score Breakdown")
+
+    MAX_ATS = {
+        "Contact": 10,
+        "Headings": 10,
+        "Skills": 10,
+        "Projects": 10,
+        "Experience": 10,
+        "Certifications": 10,
+        "GitHub": 5,
+        "LinkedIn": 5,
+        "Readability": 10,
+        "Formatting": 10
+    }
+
+    for category, score in ats_breakdown.items():
+        max_score = MAX_ATS.get(category, 0)
+
+        st.write(f"**{category}**")
+        st.progress(score / max_score if max_score else 0)
+        st.caption(f"{score}/{max_score}")
 
     if ats_score >= 80:
         st.success("✅ ATS Friendly Resume")
@@ -124,7 +150,7 @@ def analyze_resume(text):
     else:
         st.error("❌ ATS Optimization Needed")
 
-    career_score = int((score + ats_score) / 2)
+    career_score = int((resume_score + ats_score) / 2)
 
     with col3:
         with st.container(border=True):
