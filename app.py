@@ -66,7 +66,12 @@ if upload_file is not None:
     text = ""
 
     for page in pdf.pages:
-        text += page.extract_text()
+        
+        extracted = page.extract_text()
+
+        if extracted:
+            text += extracted + "\n"
+
 
     st.session_state.resume_text = text    
 
@@ -92,12 +97,34 @@ analyze = st.button("Analyze Resume")
 
 if analyze:
     st.session_state.analyzed = True
-    
-text = st.session_state.get("resume_text", "")
 
-strengths, weaknesses, suggestions = analyze_candidate(text)
+    if upload_file is None:
+        st.warning("📄 Please upload a resume first.")
+        st.stop()
 
-if st.session_state.analyzed:
+    text = st.session_state.get("resume_text", "")
+
+    if len(text.split()) < 20:
+
+        st.error("📄 No readable text was found in the uploaded resume.")
+        st.caption("Sparrow couldn't extract any text from this PDF.")
+
+        st.info(
+            """
+    Please upload a resume that contains selectable text.
+
+    Possible reasons:
+    • The PDF is scanned as an image.
+    • The file is empty.
+    • The PDF is corrupted.
+    • The text could not be extracted.
+    """
+        )
+
+        st.stop()
+
+    strengths, weaknesses, suggestions = analyze_candidate(text)
+
     resume_score, ats_score, career_score, missing_skills, skills_found = analyze_resume(
         text,
         detected_domain,
