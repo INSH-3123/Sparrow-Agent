@@ -6,16 +6,17 @@ CAREER_PROFILES = {
 
                 "core_skills": [
                     "PYTHON",
-                    "MACHINE LEARNING"
+                    "MACHINE LEARNING",
+                    "DEEP LEARNING"
                 ],
 
                 "important_skills": [
-                    "DEEP LEARNING",
                     "TENSORFLOW"
                 ],
 
                 "bonus_skills": [
-                    "PYTORCH"
+                    "PYTORCH",
+                    "KERAS"
                 ]
             },
 
@@ -23,11 +24,11 @@ CAREER_PROFILES = {
 
                 "core_skills": [
                     "PYTHON",
-                    "MACHINE LEARNING"
+                    "MACHINE LEARNING",
+                    "SCIKIT-LEARN"
                 ],
 
                 "important_skills": [
-                    "SCIKIT-LEARN",
                     "NUMPY"
                 ],
 
@@ -40,7 +41,8 @@ CAREER_PROFILES = {
 
                 "core_skills": [
                     "PYTHON",
-                    "SQL"
+                    "SQL",
+                    "DATA ANALYSIS"
                 ],
 
                 "important_skills": [
@@ -49,7 +51,10 @@ CAREER_PROFILES = {
                 ],
 
                 "bonus_skills": [
-                    "DATA VISUALIZATION"
+                    "DATA VISUALIZATION",
+                    "POWER BI",
+                    "MATPLOTLIB",
+                    "SEABORN"
                 ]
             }
         },

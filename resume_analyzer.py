@@ -4,6 +4,7 @@ from ats_score import calculate_ats_score
 
 from career_readiness import calculate_career_readiness
 
+
 def analyze_resume(text, detected_domain, career_profile):
 
     st.subheader("Resume Analysis")
@@ -232,8 +233,14 @@ def analyze_resume(text, detected_domain, career_profile):
 
     with col1:
         if st.session_state.analyzed:
+            
+            
 
             if st.button("🎯 Skill Recommendations"):
+                st.session_state.show_skills = True
+
+            if st.session_state.get("show_skills", False):
+                # display recommendations
 
                 st.subheader("📚 Learning Recommendations")
 
@@ -266,7 +273,14 @@ def analyze_resume(text, detected_domain, career_profile):
     with col2:
         if st.session_state.analyzed:
             
+            
+
             if st.button("💼 Job Role Recommendations"):
+                st.session_state.show_jobs = True
+
+            if st.session_state.get("show_jobs", False):
+                st.subheader("💼 Recommended Job Roles")
+                # display jobs
 
                 roles = []
 
@@ -282,8 +296,14 @@ def analyze_resume(text, detected_domain, career_profile):
                 if "DEEP LEARNING" in text.upper():
                     roles.append("🧠 ML Intern")
 
-                for role in roles:
-                    st.success(role)   
+                if roles:
+                    for role in roles:
+                        st.success(role)
+                else:
+                    st.info(
+                        "No job recommendations are available for this domain yet."
+                    )
+
 
         st.subheader("📝 Resume Improvement Suggestions")
 

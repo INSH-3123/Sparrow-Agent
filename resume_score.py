@@ -14,9 +14,29 @@ MAX_FORMATTING = 5
 def score_education(text):
     text = text.upper().strip()
 
-    if "EDUCATION" in text:
-        return MAX_EDUCATION
-    return 0    
+    score = 0
+
+    if "EDUCATION" in text :
+        score += 5
+
+    else:
+        return 0
+
+    degree_keywords = [
+        "B.TECH", "BTECH", "B.E", "BE",
+        "BACHELOR", "M.TECH", "MTECH",
+        "M.E", "ME", "MASTER",
+        "BSC", "MSC", "MCA", "DIPLOMA"
+    ]
+
+    if any(degree in text for degree in degree_keywords):
+        score += 5
+
+    if "%" in text or "CGPA" in text or "GPA" in text:
+        score += 5
+
+    return min(score, MAX_EDUCATION)
+
 
 def score_skills(text):
     text = text.upper().strip()
@@ -43,65 +63,111 @@ def score_skills(text):
     return 0      
 
 
-def score_projects(text):
-    text = text.upper().strip()
+import re
 
-    if "PROJECT" not in text:
+def score_projects(text):
+    text = text.upper()
+
+    match = re.search(
+        r"PROJECTS?(.*?)(EDUCATION|SKILLS|EXPERIENCE|WORK EXPERIENCE|INTERNSHIPS|CERTIFICATIONS|CERTIFICATES|ACHIEVEMENTS|SUMMARY|PROFILE|$)",
+        text,
+        re.DOTALL
+    )
+
+    if not match:
         return 0
 
-    project_text = text 
+    project_section = match.group(1)
 
     technologies_found = 0
 
     for tech, aliases in ALIASES.items():
-
-        if any(alias in project_text for alias in aliases):
+        if any(alias in project_section for alias in aliases):
             technologies_found += 1
 
     if technologies_found >= 10:
         return MAX_PROJECTS
-
     elif technologies_found >= 7:
         return 15
-
     elif technologies_found >= 4:
         return 10
+    elif technologies_found >= 2:
+        return 5
 
-    elif technologies_found >= 1:
-        return 5    
+    return 0
 
-    return 0 
 
 
 def score_experience(text):
     text = text.upper().strip()
     
-    if "EXPERIENCE" in text:
+    if "WORK EXPERIENCE" in text or "PROFESSIONAL EXPERIENCE" in text:
         return MAX_EXPERIENCE
 
-    elif "INTERNSHIP" in text:
-        return 15 
+    elif "INTERNSHIP" in text or "INTERNSHIPS" in text:
+        return 15
+
+    elif "EXPERIENCE" in text:
+        return 10
 
     return 0
 
 
 def score_certifications(text):
-    text = text.upper().strip()
+    text = text.upper()
 
-    if "CERTIFICATION" not in text:
+    match = re.search(
+        r"CERTIFICATIONS?(.*?)(PROJECTS?|EDUCATION|SKILLS|EXPERIENCE|ACHIEVEMENTS|SUMMARY|PROFILE|$)",
+        text,
+        re.DOTALL
+    )
+
+    if not match:
         return 0
-    
-    if "CERTIFICATION" in text:
+
+    cert_section = match.group(1)
+
+    cert_count = len([
+        line.strip()
+        for line in cert_section.splitlines()
+        if line.strip()
+    ])
+
+    if cert_count >= 3:
         return MAX_CERTIFICATIONS
-    
+    elif cert_count == 2:
+        return 7
+    elif cert_count == 1:
+        return 4
+
     return 0
 
 
 def score_achievements(text):
-    text = text.upper().strip()
+    text = text.upper()
 
-    if "ACHIEVEMENT" in text:
+    match = re.search(
+        r"ACHIEVEMENTS?(.*?)(PROJECTS?|EDUCATION|SKILLS|EXPERIENCE|CERTIFICATIONS|SUMMARY|PROFILE|$)",
+        text,
+        re.DOTALL
+    )
+
+    if not match:
+        return 0
+
+    achievement_section = match.group(1)
+
+    count = len([
+        line.strip()
+        for line in achievement_section.splitlines()
+        if line.strip()
+    ])
+
+    if count >= 2:
         return MAX_ACHIEVEMENTS
+
+    elif count == 1:
+        return 3
 
     return 0
 

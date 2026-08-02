@@ -5,6 +5,13 @@ st.set_page_config(
     page_icon="🪶",
     layout="wide"
 )
+
+if "show_skills" not in st.session_state:
+    st.session_state.show_skills = False
+
+if "show_jobs" not in st.session_state:
+    st.session_state.show_jobs = False
+
 with st.sidebar:
 
     st.title("🪶 Sparrow Agent")
@@ -97,6 +104,8 @@ analyze = st.button("Analyze Resume")
 
 if analyze:
     st.session_state.analyzed = True
+
+if st.session_state.analyzed:
 
     if upload_file is None:
         st.warning("📄 Please upload a resume first.")

@@ -8,26 +8,65 @@ MAX_LINKEDIN = 5
 MAX_RESUME_QUALITY = 10
 MAX_ATS_QUALITY = 5
 
-def score_projects(text):
-    text = text.upper().strip()
+import re
 
-    if "PROJECT" in text:
+def score_projects(text):
+    text = text.upper()
+
+    match = re.search(
+        r"PROJECTS?(.*?)(EDUCATION|SKILLS|EXPERIENCE|WORK EXPERIENCE|INTERNSHIPS|CERTIFICATIONS|CERTIFICATES|ACHIEVEMENTS|SUMMARY|PROFILE|$)",
+        text,
+        re.DOTALL
+    )
+
+    if not match:
+        return 0
+
+    project_section = match.group(1)
+
+    project_lines = [
+        line.strip()
+        for line in project_section.splitlines()
+        if line.strip()
+    ]
+
+    project_count = 0
+
+    for line in project_lines:
+        words = line.split()
+
+        # Project titles are usually short
+        if 2 <= len(words) <= 8:
+            project_count += 1
+
+    if project_count >= 4:
         return MAX_PROJECTS
+
+    elif project_count >= 3:
+        return 15
+
+    elif project_count >= 2:
+        return 10
+
+    elif project_count >= 1:
+        return 5
+
     return 0
 
 def score_experience(text):
     text = text.upper().strip()
 
-    headings = [
-        "EXPERIENCE",
-        "WORK EXPERIENCE",
-        "PROFESSIONAL EXPERIENCE",
-        "INTERNSHIP",
-        "INTERNSHIPS"
-    ]
-
-    if any(heading in text for heading in headings):
+    if "PROFESSIONAL EXPERIENCE" in text:
         return MAX_EXPERIENCE
+
+    elif "WORK EXPERIENCE" in text:
+        return MAX_EXPERIENCE
+
+    elif "EXPERIENCE" in text:
+        return 15
+
+    elif "INTERNSHIP" in text or "INTERNSHIPS" in text:
+        return 10
 
     return 0
 
@@ -41,8 +80,19 @@ def score_github(text):
 def score_portfolio(text):
     text = text.upper().strip()
 
-    if "PORTFOLIO" in text:
+    portfolio_keywords = [
+        "PORTFOLIO",
+        "VERCEL.APP",
+        "NETLIFY.APP",
+        "GITHUB.IO",
+        "BEHANCE.NET",
+        "DRIBBBLE.COM",
+        "MYPORTFOLIO.COM"
+    ]
+
+    if any(keyword in text for keyword in portfolio_keywords):
         return MAX_PORTFOLIO
+
     return 0
 
 def score_certifications(text):
