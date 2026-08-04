@@ -1,36 +1,8 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title="Sparrow Agent",
-    page_icon="🪶",
-    layout="wide"
-)
+from supabase_client import supabase
 
-if "show_skills" not in st.session_state:
-    st.session_state.show_skills = False
-
-if "show_jobs" not in st.session_state:
-    st.session_state.show_jobs = False
-
-with st.sidebar:
-
-    st.title("🪶 Sparrow Agent")
-
-    st.divider()
-
-    st.header("Navigation")
-
-    st.write("🏠 **Dashboard**")
-    st.write("📄 **Resume Analysis**")
-    st.write("📊 **Resume Score**")
-    st.write("🎯 **ATS Score**")
-    st.write("🧠 **Skill Gap**")
-    st.write("💼 **Job Recommendations**")
-    st.write("📥 **Download Report**")
-
-    st.divider()
-
-    st.caption("Version 0.3 - AI Resume Analysis Assistant")
+from auth import sign_up  
 
 from pypdf import PdfReader
 
@@ -55,6 +27,116 @@ from career_coach import career_coach
 from ai_chat import ask_ai
 
 from career_profiles import CAREER_PROFILES
+
+st.set_page_config(
+    page_title="Sparrow Agent",
+    page_icon="🪶",
+    layout="wide"
+)
+
+if "show_skills" not in st.session_state:
+    st.session_state.show_skills = False
+
+if "show_jobs" not in st.session_state:
+    st.session_state.show_jobs = False
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+with st.sidebar:
+
+    st.title("🪶 Sparrow Agent")
+
+    st.divider()
+
+    st.header("Navigation")
+
+    st.write("🏠 **Dashboard**")
+    st.write("📄 **Resume Analysis**")
+    st.write("📊 **Resume Score**")
+    st.write("🎯 **ATS Score**")
+    st.write("🧠 **Skill Gap**")
+    st.write("💼 **Job Recommendations**")
+    st.write("📥 **Download Report**")
+
+    st.divider()
+
+    st.caption("Version 0.3 - AI Resume Analysis Assistant")
+
+if st.session_state.logged_in:
+    if st.button("🚪 Logout"):
+        supabase.auth.sign_out()
+
+        st.session_state.logged_in = False
+        st.session_state.user = None
+
+        st.rerun()
+
+session = supabase.auth.get_session()
+
+if session:
+    st.session_state.logged_in = True
+    st.session_state.user = session.user
+
+if not st.session_state.logged_in:
+
+    st.title("🪶 Sparrow")
+
+    tab1, tab2 = st.tabs(["Sign Up", "Log In"])
+
+    with tab1:
+        st.subheader("Create your account")
+
+        email = st.text_input("Email", key="signup_email")
+        password = st.text_input(
+            "Password",
+            type="password",
+            key="signup_password"
+        )
+
+        if st.button("Create Account"):
+            try:
+                supabase.auth.sign_up(
+                    {
+                        "email": email,
+                        "password": password,
+                    }
+                )
+                st.success("Account created successfully!")
+
+            except Exception as e:
+                st.error(str(e))
+
+    with tab2:
+        st.subheader("Welcome back")
+
+        login_email = st.text_input("Email", key="login_email")
+
+        login_password = st.text_input(
+            "Password",
+            type="password",
+            key="login_password"
+        )
+
+        if st.button("Log In"):
+            try:
+                response = supabase.auth.sign_in_with_password(
+                    {
+                        "email": login_email,
+                        "password": login_password,
+                    }
+                )
+
+                st.success("Logged in successfully!")
+
+                st.session_state["logged_in"] = True 
+                st.session_state.user = response.user
+                st.rerun()
+
+            except Exception as e:
+                st.error(str(e))        
+
+    st.stop()
 
 st.title("🪶 Sparrow Agent")
 
