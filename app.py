@@ -2,7 +2,11 @@ import streamlit as st
 
 from supabase_client import supabase
 
-from auth import sign_up  
+from auth import sign_up, login, logout, check_session
+
+from profile_manager import is_onboarding_complete
+
+from onboarding import show_onboarding
 
 from pypdf import PdfReader
 
@@ -63,20 +67,16 @@ with st.sidebar:
 
     st.caption("Version 0.3 - AI Resume Analysis Assistant")
 
+check_session()
+
+if st.session_state.logged_in:
+    if not is_onboarding_complete():
+        show_onboarding()
+        st.stop()
+
 if st.session_state.logged_in:
     if st.button("🚪 Logout"):
-        supabase.auth.sign_out()
-
-        st.session_state.logged_in = False
-        st.session_state.user = None
-
-        st.rerun()
-
-session = supabase.auth.get_session()
-
-if session:
-    st.session_state.logged_in = True
-    st.session_state.user = session.user
+        logout()
 
 if not st.session_state.logged_in:
 
@@ -96,12 +96,8 @@ if not st.session_state.logged_in:
 
         if st.button("Create Account"):
             try:
-                supabase.auth.sign_up(
-                    {
-                        "email": email,
-                        "password": password,
-                    }
-                )
+                sign_up(email, password)
+
                 st.success("Account created successfully!")
 
             except Exception as e:
@@ -120,21 +116,13 @@ if not st.session_state.logged_in:
 
         if st.button("Log In"):
             try:
-                response = supabase.auth.sign_in_with_password(
-                    {
-                        "email": login_email,
-                        "password": login_password,
-                    }
-                )
+                login(login_email, login_password)
 
                 st.success("Logged in successfully!")
-
-                st.session_state["logged_in"] = True 
-                st.session_state.user = response.user
                 st.rerun()
 
             except Exception as e:
-                st.error(str(e))        
+                st.error(str(e))         
 
     st.stop()
 
