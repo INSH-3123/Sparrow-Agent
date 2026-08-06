@@ -5,8 +5,10 @@ from supabase_client import supabase
 from auth import sign_up, login, logout, check_session
 
 from profile_manager import (
+    save_profile,
     get_profile,
     mark_welcome_shown,
+    create_empty_profile,
 )
 
 from onboarding import show_onboarding
@@ -35,6 +37,11 @@ from ai_chat import ask_ai
 
 from career_profiles import CAREER_PROFILES
 
+from history_manager import (
+    save_resume,
+    save_analysis,
+)
+
 st.set_page_config(
     page_title="Sparrow Agent",
     page_icon="🪶",
@@ -50,7 +57,22 @@ if "show_jobs" not in st.session_state:
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
+if "show_email_verified" not in st.session_state:
+    st.session_state.show_email_verified = False
+
 check_session()
+
+if st.session_state.logged_in:
+
+    profile = get_profile()
+
+    if profile is None:
+        create_empty_profile()
+        profile = get_profile()
+
+    if not profile["onboarding_completed"]:
+        show_onboarding()
+        st.stop()
 
 with st.sidebar:
 
@@ -70,21 +92,26 @@ with st.sidebar:
 
     st.divider()
 
+    st.subheader("👤 My Profile")
+
+    if st.session_state.logged_in:
+
+        st.text(f"📧 {st.session_state.user.email}")
+
+        st.write(f"🎯 {profile['target_role'] or 'Not selected'}")
+
+        st.write(f"🎓 {profile['qualification']}")
+
+        st.write(f"💼 {profile['experience_level']}")
+
+    st.divider()
+
     if st.session_state.logged_in:
         if st.button("🚪 Logout", use_container_width=True):
             logout()
 
 
     st.caption("Version 0.3 - AI Resume Analysis Assistant")
-
-if st.session_state.logged_in:
-
-    profile = get_profile()
-
-    if not profile["onboarding_completed"]:
-        show_onboarding()
-        st.stop()
-
 
 if not st.session_state.logged_in:
 
@@ -106,11 +133,7 @@ if not st.session_state.logged_in:
             try:
                 sign_up(email, password)
 
-                st.success(
-                    "🪶 Welcome to Sparrow!\n\n"
-                    "We've sent a verification email to your inbox.\n"
-                    "Please verify your email before signing in."
-                )
+                st.session_state.show_email_verified = True
 
             except Exception as e:
                 st.error(str(e))
@@ -348,8 +371,38 @@ if st.session_state.analyzed:
         rating,
         skills_found
     )
-    
-    
+
+    analysis_data = {
+        "strengths": strengths,
+        "weaknesses": weaknesses,
+        "suggestions": suggestions,
+        "career_scores": career_scores,
+        "skills_found": skills_found,
+        "missing_skills": missing_skills,
+        "rating": rating,
+        "report": report,
+    }
+
+    resume_id = save_resume(
+        resume_name=upload_file.name,
+        resume_url=None,
+        resume_text=text,
+    )
+        
+    if resume_id:
+
+        save_analysis(
+            resume_id=resume_id,
+            detected_domain=detected_domain,
+            confidence=confidence,
+            resume_score=resume_score,
+            ats_score=ats_score,
+            career_readiness=career_score,
+            best_role=best_role,
+            analysis_data=analysis_data,
+            report_url=None,
+        )
+
     st.download_button(
         label="📄 Download Report",
         data=report,
