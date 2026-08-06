@@ -122,3 +122,34 @@ def get_analysis_history(resume_id):
 
         st.error(f"Failed to load analysis history: {e}")
         return []
+
+def upload_report(file_name, report):
+
+    try:
+        
+        st.write("Current user:")
+        st.write(supabase.auth.get_user())
+
+        response = supabase.storage.from_("reports").upload(
+            path=file_name,
+            file=report.encode("utf-8"),
+            file_options={
+                "content-type": "text/plain",
+                "upsert": "true",
+            },
+        )
+
+        st.write(response)
+
+        url = (
+            supabase.storage
+            .from_("reports")
+            .get_public_url(file_name)
+        )
+
+        return url
+
+    except Exception as e:
+
+        st.error(f"Failed to upload report: {e}")
+        return None

@@ -42,6 +42,7 @@ from history_manager import (
     save_analysis,
     get_resume_history,
     get_analysis_history,
+    upload_report,
 )
 
 st.set_page_config(
@@ -373,6 +374,8 @@ if st.session_state.analyzed:
     candidate = get_candidate_name(text)
 
     rating = get_rating(career_score)
+
+    # Generate and Save Report
     
     report = generate_report(
         candidate,
@@ -380,8 +383,16 @@ if st.session_state.analyzed:
         career_score,
         best_role,
         rating,
-        skills_found
+        skills_found,
     )
+
+    report_file_name = upload_file.name.replace(" ", "_") + ".txt"
+
+    report_url = upload_report(
+        report_file_name,
+        report,
+    )
+
 
     analysis_data = {
         "rating": rating,
@@ -410,7 +421,7 @@ if st.session_state.analyzed:
             career_readiness=career_score,
             best_role=best_role,
             analysis_data=analysis_data,
-            report_url=None,
+            report_url=report_url,
         )
 
     st.download_button(
