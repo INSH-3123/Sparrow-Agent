@@ -4,7 +4,10 @@ from supabase_client import supabase
 
 from auth import sign_up, login, logout, check_session
 
-from profile_manager import is_onboarding_complete
+from profile_manager import (
+    get_profile,
+    mark_welcome_shown,
+)
 
 from onboarding import show_onboarding
 
@@ -47,6 +50,8 @@ if "show_jobs" not in st.session_state:
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
+check_session()
+
 with st.sidebar:
 
     st.title("🪶 Sparrow Agent")
@@ -65,18 +70,21 @@ with st.sidebar:
 
     st.divider()
 
+    if st.session_state.logged_in:
+        if st.button("🚪 Logout", use_container_width=True):
+            logout()
+
+
     st.caption("Version 0.3 - AI Resume Analysis Assistant")
 
-check_session()
-
 if st.session_state.logged_in:
-    if not is_onboarding_complete():
+
+    profile = get_profile()
+
+    if not profile["onboarding_completed"]:
         show_onboarding()
         st.stop()
 
-if st.session_state.logged_in:
-    if st.button("🚪 Logout"):
-        logout()
 
 if not st.session_state.logged_in:
 
@@ -98,7 +106,11 @@ if not st.session_state.logged_in:
             try:
                 sign_up(email, password)
 
-                st.success("Account created successfully!")
+                st.success(
+                    "🪶 Welcome to Sparrow!\n\n"
+                    "We've sent a verification email to your inbox.\n"
+                    "Please verify your email before signing in."
+                )
 
             except Exception as e:
                 st.error(str(e))
@@ -122,13 +134,40 @@ if not st.session_state.logged_in:
                 st.rerun()
 
             except Exception as e:
-                st.error(str(e))         
+
+                if "Email not confirmed" in str(e):
+                    st.warning("📧 Please verify your email before logging in.")
+
+                else:
+                    st.error(str(e))    
 
     st.stop()
 
 st.title("🪶 Sparrow Agent")
 
-st.write("Welcome to Sparrow Agent!")
+if not profile["welcome_shown"]:
+
+    st.subheader("👋 Welcome to Sparrow!")
+
+    st.write(
+        f"""
+Your career workspace is ready.
+
+Let's start building your path toward becoming a **{profile["target_role"]}**.
+"""
+    )
+
+    mark_welcome_shown()
+
+else:
+
+    st.subheader("👋 Welcome back!")
+
+    st.write(
+        """
+Ready to continue where you left off?
+"""
+    )
 
 upload_file = st.file_uploader(
     "Upload a resume(PDF)", 
@@ -444,3 +483,23 @@ if st.session_state.analyzed:
 
                 with st.container(border=True):
                     st.markdown(response)
+
+    st.divider()
+
+    st.html("""
+    <div style="text-align: center; color: #9CA3AF; padding: 12px 0;">
+        <h4 style="margin-bottom: 8px;">🪶 Sparrow Agent</h4>
+
+        <p style="margin: 4px 0;">
+            Your AI Career Development Assistant
+        </p>
+
+        <p style="margin: 4px 0;">
+            Version 0.3.0
+        </p>
+
+        <p style="margin-top: 12px; font-size: 13px;">
+            © 2026 Sparrow Agent
+        </p>
+    </div>
+    """)

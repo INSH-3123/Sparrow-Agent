@@ -11,6 +11,9 @@ def show_onboarding():
 
     st.write("Questionnaire coming soon...")
 
+    st.caption("Step 1 of 5")
+    st.write("●────○────○────○────○")
+
     st.subheader("1. What best describes you?")
 
     experience_level = st.radio(
@@ -71,12 +74,35 @@ def show_onboarding():
         key="career_goal",
     )
 
+    st.subheader("5. What's your target role?")
+
+    target_role = st.selectbox(
+        "🎯 Target Role",
+        [
+            "AI Engineer",
+            "Machine Learning Engineer",
+            "Data Scientist",
+            "Data Analyst",
+            "Software Engineer",
+            "Backend Developer",
+            "Frontend Developer",
+            "Full Stack Developer",
+            "Cyber Security Analyst",
+            "Cloud Engineer",
+            "DevOps Engineer",
+            "UI/UX Designer",
+            "Mobile App Developer",
+            "Game Developer",
+            "Other",
+        ],
+    )
+
     if st.button("Continue →"):
         save_profile(
             qualification=qualification,
             experience_level=experience_level,
             domain=domain,
-            target_role="",
+            target_role=target_role,
             career_goal=career_goal,
         )
 
