@@ -40,6 +40,8 @@ from career_profiles import CAREER_PROFILES
 from history_manager import (
     save_resume,
     save_analysis,
+    get_resume_history,
+    get_analysis_history,
 )
 
 st.set_page_config(
@@ -59,6 +61,15 @@ if "logged_in" not in st.session_state:
 
 if "show_email_verified" not in st.session_state:
     st.session_state.show_email_verified = False
+
+if "show_resume_history" not in st.session_state:
+    st.session_state.show_resume_history = False
+
+if "show_report_upload" not in st.session_state:
+        st.session_state.show_report_upload = False 
+
+if "selected_resume_id" not in st.session_state:
+    st.session_state.selected_resume_id = None
 
 check_session()
 
@@ -373,14 +384,13 @@ if st.session_state.analyzed:
     )
 
     analysis_data = {
+        "rating": rating,
         "strengths": strengths,
         "weaknesses": weaknesses,
         "suggestions": suggestions,
         "career_scores": career_scores,
         "skills_found": skills_found,
         "missing_skills": missing_skills,
-        "rating": rating,
-        "report": report,
     }
 
     resume_id = save_resume(
@@ -408,10 +418,92 @@ if st.session_state.analyzed:
         data=report,
         file_name="sparrow_report.txt",
         mime="text/plain"
+        )   
+
+    if st.button(
+        "📜 Resume History",
+        use_container_width=True,
+    ):
+        st.session_state.show_resume_history = (
+            not st.session_state.show_resume_history
         )
 
-    if "show_report_upload" not in st.session_state:
-        st.session_state.show_report_upload = False    
+    if st.session_state.show_resume_history:
+
+        history = get_resume_history()
+
+        if not history:
+            st.info("No resumes uploaded yet.")
+
+        else:
+
+            st.subheader("📜 Resume History")
+
+            for resume in history:
+
+                st.markdown("---")
+
+                st.markdown(f"### 📄 {resume['resume_name']}")
+
+                st.caption(
+                    f"Uploaded: {resume['created_at'][:10]}"
+                )
+
+                is_selected = (
+                    st.session_state.selected_resume_id == resume["id"]
+                )
+
+                if st.button(
+                    "✅ Analysis Opened" if is_selected else "📖 Open Analysis",
+                    key=f"analysis_{resume['id']}",
+                    disabled=is_selected,
+                    use_container_width=True,
+                ):
+                    st.session_state.selected_resume_id = resume["id"]
+                    
+            if st.session_state.selected_resume_id:
+
+                analyses = get_analysis_history(
+                    st.session_state.selected_resume_id
+                ) 
+
+                if analyses:
+
+                    analysis = analyses[0]
+
+                    st.subheader("📊 Previous Analysis")
+
+                    col1, col2, col3 = st.columns(3)
+
+                    with col1:
+                        st.metric("Resume Score", analysis["resume_score"])
+
+                    with col2:
+                        st.metric("ATS Score", analysis["ats_score"])
+
+                    with col3:
+                        st.metric("Career Readiness", analysis["career_readiness"])
+
+                    st.markdown(f"**🎯 Best Role:** {analysis['best_role']}")
+
+                    st.markdown(f"**🧠 Domain:** {analysis['detected_domain']}")
+
+                    st.markdown(f"**🎯 Confidence:** {analysis['confidence']}%")
+
+                    st.subheader("📈 Career Match Scores")
+
+                    career_scores = analysis["analysis_data"]["career_scores"]
+
+                    for role, score in career_scores.items():
+                        st.progress(score / 100)
+                        st.caption(f"{role} — {score}%")
+
+                    if analysis.get("report_url"):
+                        st.link_button(
+                            "📄 Download Previous Report",
+                            analysis["report_url"],
+                            use_container_width=True,
+                        )
 
     if st.button(
         "🪶 AI Career Guidance",
